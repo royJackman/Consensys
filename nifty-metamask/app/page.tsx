@@ -3,6 +3,7 @@ import { TypewriterEffect } from "./components/ui/typewriter-effect";
 import MetaMaskOnboarding from "@metamask/onboarding";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import { NiFTyCard } from "./components/NFT/NiFTy-card";
+import detectEthereumProvider from "@metamask/detect-provider";
 
 declare global {
   interface Window {
@@ -23,17 +24,22 @@ export default function Home() {
   const [accounts, setAccounts] = useState<string[]>([]);
   const onboarding = useRef<MetaMaskOnboarding>();
 
-  const handleNewAccounts = (newAccounts: SetStateAction<string[]>) => setAccounts(newAccounts);
+  const handleNewAccounts = (newAccounts: SetStateAction<string[]>) =>
+    setAccounts(newAccounts);
 
   useEffect(() => {
     if (!onboarding.current) {
       if (MetaMaskOnboarding.isMetaMaskInstalled()) {
-        window.ethereum
-          .request({ method: "eth_requestAccounts" })
-          .then(handleNewAccounts);
-        window.ethereum.on("accountsChanged", handleNewAccounts);
-        return () =>
-          window.ethereum.removeListener("accountsChanged", handleNewAccounts);
+        detectEthereumProvider().then((provider: any) => {
+          if (provider) {
+            provider
+              .request({ method: "eth_requestAccounts" })
+              .then(handleNewAccounts);
+            provider.on("accountsChanged", handleNewAccounts);
+            return () =>
+              provider.removeListener("accountsChanged", handleNewAccounts);
+          }
+        });
       } else {
         onboarding.current = new MetaMaskOnboarding(); // Create onboarding ref object
       }
@@ -51,9 +57,13 @@ export default function Home() {
 
   const onClick = () => {
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
-      window.ethereum
-        .request({ method: "eth_requestAccounts" })
-        .then(handleNewAccounts);
+      detectEthereumProvider().then((provider: any) => {
+        if (provider) {
+          provider
+            .request({ method: "eth_requestAccounts" })
+            .then(handleNewAccounts);
+        }
+      });
     } else {
       onboarding.current?.startOnboarding();
     }
@@ -75,7 +85,7 @@ export default function Home() {
             Connect to MetaMask
           </button>
         ) : (
-          <NiFTyCard account={accounts[0]}/>
+          <NiFTyCard account={accounts[0]} />
         )}
       </div>
     </div>

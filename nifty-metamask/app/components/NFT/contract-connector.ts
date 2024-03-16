@@ -1,6 +1,6 @@
 import Web3 from "web3";
 
-const web3 = new Web3(`https://${process.env.ETHEREUM_NETWORK}.infura.io/v3/${process.env.INFURA_API}`);
+const web3 = new Web3(`https://${process.env.NEXT_PUBLIC_ETHEREUM_NETWORK}.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API}`);
 
 const NiFTyMintingContractABI = [
     {
@@ -684,8 +684,8 @@ const NiFTyLoaningContractABI = [
     }
 ];
 
-const NiFTyMintingContract = new web3.eth.Contract(NiFTyMintingContractABI, process.env.NIFTY_MINT_CONTRACT_ADDRESS);
-const NiFTyLoaningContract = new web3.eth.Contract(NiFTyLoaningContractABI, process.env.NIFTY_LOAN_CONTRACT_ADDRESS);
+const NiFTyMintingContract = new web3.eth.Contract(NiFTyMintingContractABI, process.env.NEXT_PUBLIC_NIFTY_MINT_CONTRACT_ADDRESS);
+const NiFTyLoaningContract = new web3.eth.Contract(NiFTyLoaningContractABI, process.env.NEXT_PUBLIC_NIFTY_LOAN_CONTRACT_ADDRESS);
 
 export const mintNiFTy = (recipient: string, colorTL: string, colorTR: string, colorBL: string, colorBR: string) => {
     NiFTyMintingContract.methods.mint(recipient, colorTL, colorTR, colorBL, colorBR)

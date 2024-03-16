@@ -15,6 +15,13 @@ export const NiFTyCard = ({account}: {account: string}) => {
 
     const onMintClick = () => mintNiFTy(account, TLColor, TRColor, BLColor, BRColor);
 
+    const onValuableClick = () => {
+        setTLColor('#000000');
+        setTRColor('#000000');
+        setBRColor('#000000');
+        setBLColor('#000000');
+    }
+
   return (
     <div className="max-w-md overflow-hidden shadow-lg rounded bg-gray-500">
       <div className="px-6 py-4">
@@ -55,6 +62,7 @@ export const NiFTyCard = ({account}: {account: string}) => {
       </div>
       <div className="text-base flex flex-col items-center p-5">
         <Button onClick={onMintClick}>Mint me!</Button>
+        <button className="bg-blue-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4" onClick={onValuableClick}>The valuable one</button>
       </div>
     </div>
   );
